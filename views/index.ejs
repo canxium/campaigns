@@ -344,7 +344,7 @@
                       </div>
                       <p class="text-xs mt-1 mb-0 font-weight-bold">Refund</p>
                     </div>
-                    <h4 class="font-weight-bolder">$0</h4>
+                    <h4 class="font-weight-bolder">0 CAU</h4>
                     <div class="progress w-75">
                       <div class="progress-bar bg-dark w-0" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
@@ -473,7 +473,7 @@
                           <span class="badge badge-sm bg-gradient-primary">$<%= investments[i].amount %></span>
                         </td>
                         <td class="align-middle text-center">
-                          <span class="text-secondary text-xs font-weight-bold">$<%= investments[i].refund %></span>
+                          <span class="text-secondary text-xs font-weight-bold"><%= investments[i].refund %> CAU</span>
                         </td>
                         <td class="align-middle text-center">
                           <span class="text-secondary text-xs font-weight-bold"><%= investments[i].ctime.toLocaleDateString() %></span>
