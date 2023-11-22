@@ -63,6 +63,9 @@
     document.getElementById("mexcRaised").textContent = USDollar.format(ethereum + bsc + polygon)
     document.getElementById("mexcListingRaised").textContent = USDollar.format(ethereum + bsc + polygon)
     document.getElementById("mexcPercent").textContent = (parseInt(ethereum + bsc + polygon)*100/60000).toFixed(0) + "%"
+    document.getElementById("raisedProgress").classList.add(`w-${(parseInt(ethereum + bsc + polygon)*100/60000).toFixed(0)}`)
+    document.getElementById("raisedProgress2").classList.add(`w-${(parseInt(ethereum + bsc + polygon)*100/60000).toFixed(0)}`)
+
     console.log(((ethereum + bsc + polygon)/BigInt(600)).toString() + "%")
   });
 })();
