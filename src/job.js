@@ -4,9 +4,11 @@ const axios = require('axios');
 const Investment = require("@models/Investment");
 const mongoose = require('@config/mongoose');
 const { logger } = require('@config/logger');
-const { port, env, ethRpc, campaigns } = require('@config/vars');
+const { port, env, ethRpc, campaigns, networks } = require('@config/vars');
 const { getTx, getTxReceipt } = require('@utils/blockchain');
 const cron = require('node-cron');
+const BigNumber = require('bignumber.js');
+const { token } = require('morgan');
 
 (async () => {
   try {
@@ -44,8 +46,60 @@ const cron = require('node-cron');
             }
         }
     });
+
+    cron.schedule('* * * * *', async () => {
+        console.log('scanning for new transfer every minute');
+        for (let network of networks) {
+            for (let token of network.tokens) {
+                let transfers = await getTokenTransfers(network, token)
+                for (let transfer of transfers) {
+                    let invest = await Investment.findOne({ hash: transfer.has });
+                    if (invest) {
+                        continue
+                    }
+
+                    if (transfer.to.toLowerCase() != `0x${campaigns.mexc.toLowerCase()}`) continue
+                    if (parseInt(transfer.blockNumber) <= 18589506) continue
+                    let amount = new BigNumber(transfer.value).dividedBy(token.decimal == 6 ? 1000000 : 1000000000000000000)
+                    let trx = new Investment({
+                        from        : transfer.from,
+                        name        : '',
+                        twitter     : '',
+                        amount      : parseInt(amount),
+                        hash        : transfer.hash,
+                        network     : network.name,
+                        contract    : token.address,
+                        currency    : transfer.tokenSymbol, // usdc or usdt or kaspa...
+                        decimal     : token.decimal,
+                        campaign    : 'mexc',
+                        refund      : 0,
+                        refundHash  : '',
+                        status      : 'confirmed',
+                        ctime       : Date.now(),
+                        utime       : Date.now(),
+                    });
+
+                    await trx.save()
+                }
+            }
+        }
+        
+    });
+    
   } catch (e) {
     logger.error(`${e.message}`);
   }
 })();
 
+
+async function getTokenTransfers(network, token) {
+    let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: network.api + `&contractaddress=${token.address}&address=0x${campaigns.mexc}`,
+        headers: {}
+      };
+      
+    const response = await axios.request(config);
+    return response.data.result;
+}
