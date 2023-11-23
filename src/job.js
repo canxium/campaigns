@@ -53,7 +53,7 @@ const { token } = require('morgan');
             for (let token of network.tokens) {
                 let transfers = await getTokenTransfers(network, token)
                 for (let transfer of transfers) {
-                    let invest = await Investment.findOne({ hash: transfer.has });
+                    let invest = await Investment.findOne({ hash: transfer.hash });
                     if (invest) {
                         continue
                     }
