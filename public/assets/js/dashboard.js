@@ -31,15 +31,16 @@
     const ethereum = (BigInt(value[0].result) + BigInt(value[1].result))/BigInt(1000000)
     const bsc = (BigInt(value[2].result) + BigInt(value[3].result))/BigInt("1000000000000000000")
     const polygon = (BigInt(value[4].result) + BigInt(value[5].result))/BigInt(1000000)
+    const funds = BigInt(32580)
     document.getElementById("ethereum").textContent = USDollar.format(ethereum)
     document.getElementById("polygon").textContent = USDollar.format(polygon)
     document.getElementById("bsc").textContent = USDollar.format(bsc)
-    document.getElementById("totalRaised").textContent = USDollar.format(ethereum + bsc + polygon)
-    document.getElementById("mexcRaised").textContent = USDollar.format(ethereum + bsc + polygon)
-    document.getElementById("mexcListingRaised").textContent = USDollar.format(ethereum + bsc + polygon)
-    document.getElementById("mexcPercent").textContent = (parseInt(ethereum + bsc + polygon)*100/60000).toFixed(0) + "%"
-    document.getElementById("raisedProgress").classList.add(`w-${(parseInt(ethereum + bsc + polygon)*100/60000).toFixed(0)}`)
-    document.getElementById("raisedProgress2").classList.add(`w-${(parseInt(ethereum + bsc + polygon)*100/60000).toFixed(0)}`)
+    document.getElementById("totalRaised").textContent = USDollar.format(ethereum + bsc + polygon + funds)
+    document.getElementById("mexcRaised").textContent = USDollar.format(ethereum + bsc + polygon + funds)
+    document.getElementById("mexcListingRaised").textContent = USDollar.format(ethereum + bsc + polygon + funds)
+    document.getElementById("mexcPercent").textContent = (parseInt(ethereum + bsc + polygon + funds)*100/60000).toFixed(0) + "%"
+    document.getElementById("raisedProgress").classList.add(`w-${(parseInt(ethereum + bsc + polygon + funds)*100/60000).toFixed(0)}`)
+    document.getElementById("raisedProgress2").classList.add(`w-${(parseInt(ethereum + bsc + polygon + funds)*100/60000).toFixed(0)}`)
 
     console.log(((ethereum + bsc + polygon)/BigInt(600)).toString() + "%")
   });
@@ -445,21 +446,6 @@ function toggleSidenav() {
 // Resize navbar color depends on configurator active type of sidenav
 
 let referenceButtons = document.querySelector('[data-class]');
-
-window.addEventListener("resize", navbarColorOnResize);
-
-function navbarColorOnResize() {
-  if (window.innerWidth > 1200) {
-    if (referenceButtons.classList.contains('active') && referenceButtons.getAttribute('data-class') === 'bg-transparent') {
-      sidenav.classList.remove('bg-white');
-    } else {
-      sidenav.classList.add('bg-white');
-    }
-  } else {
-    sidenav.classList.add('bg-white');
-    sidenav.classList.remove('bg-transparent');
-  }
-}
 
 // Deactivate sidenav type buttons on resize and small screens
 window.addEventListener("resize", sidenavTypeOnResize);
