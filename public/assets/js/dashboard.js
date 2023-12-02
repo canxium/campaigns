@@ -31,7 +31,7 @@
     const ethereum = (BigInt(value[0].result) + BigInt(value[1].result))/BigInt(1000000)
     const bsc = (BigInt(value[2].result) + BigInt(value[3].result))/BigInt("1000000000000000000")
     const polygon = (BigInt(value[4].result) + BigInt(value[5].result))/BigInt(1000000)
-    const funds = BigInt(16167)
+    const funds = BigInt(0)
     document.getElementById("ethereum").textContent = USDollar.format(ethereum)
     document.getElementById("polygon").textContent = USDollar.format(polygon)
     document.getElementById("bsc").textContent = USDollar.format(bsc)
