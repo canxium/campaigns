@@ -59,7 +59,7 @@ const { token } = require('morgan');
                     }
 
                     if (transfer.to.toLowerCase() != `0x${campaigns.mexc.toLowerCase()}`) continue
-                    if (network.name == "ethereum" && parseInt(transfer.blockNumber) <= 18589506) continue
+                    if (network.name == "ethereum" && parseInt(transfer.blockNumber) <= 18695399) continue
                     let amount = new BigNumber(transfer.value).dividedBy(token.decimal == 6 ? 1000000 : 1000000000000000000)
                     let trx = new Investment({
                         from        : transfer.from,
