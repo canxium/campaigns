@@ -4,8 +4,35 @@ const { campaigns } = require('@config/vars');
 const { getTx, getTxReceipt } = require("@utils/blockchain");
 
 exports.index = async (req, res, next) => {
-  let investments = await Investment.find({}).sort({'amount': -1, 'ctime': 1})
-  return res.render('index', { investments: investments });
+  let USDollar = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+  });
+
+  let investments = await Investment.find({}).sort({'amount': -1, 'ctime': 1});
+  let foundation = 36213;
+  let target = 60000;
+  let raised = investments.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.amount
+  }, 0);
+
+  let ethereum = investments.reduce((accumulator, currentValue) => {
+    if (currentValue.network != 'ethereum') return accumulator;
+    return accumulator + currentValue.amount
+  }, 0);
+
+  let polygon = investments.reduce((accumulator, currentValue) => {
+    if (currentValue.network != 'polygon') return accumulator;
+    return accumulator + currentValue.amount
+  }, 0);
+
+  let bsc = investments.reduce((accumulator, currentValue) => {
+    if (currentValue.network != 'bsc') return accumulator;
+    return accumulator + currentValue.amount
+  }, 0);
+
+  let completion = ((raised + foundation)*100/target).toFixed(0)
+  return res.render('index', { investments: investments, foundation: USDollar.format(foundation), raised: USDollar.format(raised + foundation), ethereum: USDollar.format(ethereum), polygon: USDollar.format(polygon), bsc: USDollar.format(bsc), completion: completion, });
 }
 
 exports.submitTx = async (req, res, next) => {

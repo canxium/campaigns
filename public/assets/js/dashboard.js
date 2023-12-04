@@ -14,36 +14,7 @@
 
 "use strict";
 (function() {
-  let USDollar = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-  });
-
   
-  Promise.all([
-    getErc20Balance('Bd65D6efb2C3e6B4dD33C664643BEB8e5E133055', '0xdac17f958d2ee523a2206206994597c13d831ec7', 'https://rpc.ankr.com/eth').then(response => response.json()),
-    getErc20Balance('Bd65D6efb2C3e6B4dD33C664643BEB8e5E133055', '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', 'https://rpc.ankr.com/eth').then(response => response.json()),
-    getErc20Balance('Bd65D6efb2C3e6B4dD33C664643BEB8e5E133055', '0x55d398326f99059ff775485246999027b3197955', 'https://rpc.ankr.com/bsc').then(response => response.json()),
-    getErc20Balance('Bd65D6efb2C3e6B4dD33C664643BEB8e5E133055', '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d', 'https://rpc.ankr.com/bsc').then(response => response.json()),
-    getErc20Balance('Bd65D6efb2C3e6B4dD33C664643BEB8e5E133055', '0xc2132d05d31c914a87c6611c10748aeb04b58e8f', 'https://rpc.ankr.com/polygon').then(response => response.json()),
-    getErc20Balance('Bd65D6efb2C3e6B4dD33C664643BEB8e5E133055', '0x3c499c542cef5e3811e1192ce70d8cc03d5c3359', 'https://rpc.ankr.com/polygon').then(response => response.json()),
-  ]).then(value => {
-    const ethereum = (BigInt(value[0].result) + BigInt(value[1].result))/BigInt(1000000)
-    const bsc = (BigInt(value[2].result) + BigInt(value[3].result))/BigInt("1000000000000000000")
-    const polygon = (BigInt(value[4].result) + BigInt(value[5].result))/BigInt(1000000)
-    const funds = BigInt(30012)
-    document.getElementById("ethereum").textContent = USDollar.format(ethereum)
-    document.getElementById("polygon").textContent = USDollar.format(polygon)
-    document.getElementById("bsc").textContent = USDollar.format(bsc)
-    document.getElementById("totalRaised").textContent = USDollar.format(ethereum + bsc + polygon + funds)
-    document.getElementById("mexcRaised").textContent = USDollar.format(ethereum + bsc + polygon + funds)
-    document.getElementById("mexcListingRaised").textContent = USDollar.format(ethereum + bsc + polygon + funds)
-    document.getElementById("mexcPercent").textContent = (parseInt(ethereum + bsc + polygon + funds)*100/60000).toFixed(0) + "%"
-    document.getElementById("raisedProgress").classList.add(`w-${(parseInt(ethereum + bsc + polygon + funds)*100/60000).toFixed(0)}`)
-    document.getElementById("raisedProgress2").classList.add(`w-${(parseInt(ethereum + bsc + polygon + funds)*100/60000).toFixed(0)}`)
-
-    console.log(((ethereum + bsc + polygon)/BigInt(600)).toString() + "%")
-  });
 })();
 
 // Verify navbar blur on scroll
