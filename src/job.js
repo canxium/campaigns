@@ -47,11 +47,12 @@ const { token } = require('morgan');
         }
     });
 
-    cron.schedule('* * * * *', async () => {
-        console.log('scanning for new transfer every minute');
+    // cron.schedule('* * * * *', async () => {
+    //     console.log('scanning for new transfer every minute');
         for (let network of networks) {
             for (let token of network.tokens) {
                 let transfers = await getTokenTransfers(network, token)
+                console.log(transfers)
                 for (let transfer of transfers) {
                     let invest = await Investment.findOne({ hash: transfer.hash });
                     if (invest) {
@@ -84,7 +85,7 @@ const { token } = require('morgan');
             }
         }
         
-    });
+    // });
     
   } catch (e) {
     logger.error(`${e.message}`);
@@ -96,7 +97,7 @@ async function getTokenTransfers(network, token) {
     let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: network.api + `&contractaddress=${token.address}&address=0x${campaigns.mexc}`,
+        url: network.api + `&contractaddress=${token.address}&address=0x${campaigns.hedging}`,
         headers: {}
       };
       

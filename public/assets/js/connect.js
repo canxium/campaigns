@@ -113,7 +113,7 @@
         }
 
         let amount = BigInt(parseInt(data.amount))*BigInt(contract.decimal == 6 ? "1000000" : "1000000000000000000")
-        let txData = getDataFieldValue("0xBd65D6efb2C3e6B4dD33C664643BEB8e5E133055", amount.toString())
+        let txData = getDataFieldValue("0x6DEec32876F9e2c54618ef965Fb39c28b285c9e4", amount.toString())
         try {
             let hash = await window.ethereum.request({
                 method: 'eth_sendTransaction',

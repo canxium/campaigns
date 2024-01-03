@@ -9,13 +9,10 @@ exports.index = async (req, res, next) => {
       currency: 'USD',
   });
 
-  let investments = await Investment.find({}).sort({'amount': -1, 'ctime': 1});
-  let foundation = 36213;
-  let target = 60000;
+  let investments = await Investment.find({ status: "confirmed"  }).sort({'amount': -1, 'ctime': 1});
   let raised = investments.reduce((accumulator, currentValue) => {
     return accumulator + currentValue.amount
   }, 0);
-
   let ethereum = investments.reduce((accumulator, currentValue) => {
     if (currentValue.network != 'ethereum') return accumulator;
     return accumulator + currentValue.amount
@@ -31,8 +28,37 @@ exports.index = async (req, res, next) => {
     return accumulator + currentValue.amount
   }, 0);
 
-  let completion = ((raised + foundation)*100/target).toFixed(0)
-  return res.render('index', { investments: investments, foundation: USDollar.format(foundation), raised: USDollar.format(raised + foundation), ethereum: USDollar.format(ethereum), polygon: USDollar.format(polygon), bsc: USDollar.format(bsc), completion: completion, });
+  let mexc = {};
+  let hedging = {};
+  let foundation = 36213;
+  let data = {};
+  {
+    let mexcInvestments = await Investment.find({ campaign: 'mexc', status: "confirmed"  }).sort({'amount': -1, 'ctime': 1});
+    data.mexc = await Investment.find({ campaign: 'mexc'  }).sort({'amount': -1, 'ctime': 1});;
+    let raised = mexcInvestments.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue.amount
+    }, 0);
+
+    let target = 60000;
+    let completion = ((raised + foundation)*100/target).toFixed(0)
+    mexc.raised = USDollar.format(raised + foundation);
+    mexc.completion = completion > 100 ? 100 : completion;
+  }
+
+  {
+    let hedgingInvestments = await Investment.find({ campaign: 'mexc_hedging', status: "confirmed"  }).sort({'amount': -1, 'ctime': 1});
+    data.hedging = await Investment.find({ campaign: 'mexc_hedging'  }).sort({'amount': -1, 'ctime': 1});;
+    let raised = hedgingInvestments.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue.amount
+    }, 0);
+
+    let target = 100000;
+    let completion = ((raised)*100/target).toFixed(0)
+    hedging.raised = USDollar.format(raised);
+    hedging.completion = completion > 100 ? 100 : completion;
+  }
+
+  return res.render('index', { investments: data, foundation: USDollar.format(foundation), raised: USDollar.format(raised), mexc: mexc, ethereum: USDollar.format(ethereum), polygon: USDollar.format(polygon), bsc: USDollar.format(bsc), hedging: hedging, });
 }
 
 exports.submitTx = async (req, res, next) => {
