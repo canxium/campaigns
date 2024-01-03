@@ -59,7 +59,7 @@ const { token } = require('morgan');
                         continue
                     }
 
-                    if (transfer.to.toLowerCase() != `0x${campaigns.mexc.toLowerCase()}`) continue
+                    if (transfer.to.toLowerCase() != `0x${campaigns.hedging.toLowerCase()}`) continue
                     if (network.name == "ethereum" && parseInt(transfer.blockNumber) <= 18695399) continue
                     let amount = new BigNumber(transfer.value).dividedBy(token.decimal == 6 ? 1000000 : 1000000000000000000)
                     let trx = new Investment({
@@ -72,7 +72,7 @@ const { token } = require('morgan');
                         contract    : token.address,
                         currency    : transfer.tokenSymbol, // usdc or usdt or kaspa...
                         decimal     : token.decimal,
-                        campaign    : 'mexc',
+                        campaign    : 'mexc_hedging',
                         refund      : 0,
                         refundHash  : '',
                         status      : 'confirmed',
