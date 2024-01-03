@@ -47,8 +47,8 @@ const { token } = require('morgan');
         }
     });
 
-    // cron.schedule('* * * * *', async () => {
-    //     console.log('scanning for new transfer every minute');
+    cron.schedule('* * * * *', async () => {
+        console.log('scanning for new transfer every minute');
         for (let network of networks) {
             for (let token of network.tokens) {
                 let transfers = await getTokenTransfers(network, token)
@@ -85,7 +85,7 @@ const { token } = require('morgan');
             }
         }
         
-    // });
+    });
     
   } catch (e) {
     logger.error(`${e.message}`);
