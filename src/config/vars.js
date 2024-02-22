@@ -22,6 +22,7 @@ module.exports = Object.freeze({
   campaigns           : {
     mexc              : 'bd65d6efb2c3e6b4dd33c664643beb8e5e133055',
     hedging           : '6deec32876f9e2c54618ef965fb39c28b285c9e4',
+    top12             : '6deec32876f9e2c54618ef965fb39c28b285c9e4',
   },
   networks            : [{
     name              : "ethereum",

@@ -157,7 +157,7 @@
             contract    : contract.address,
             decimal     : contract.decimal,
             currency    : data.currency, // usdc or usdt or kaspa...
-            campaign    : 'mexc_hedging',
+            campaign    : 'top12',
         });
       
         var requestOptions = {

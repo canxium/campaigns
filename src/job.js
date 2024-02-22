@@ -52,15 +52,16 @@ const { token } = require('morgan');
         for (let network of networks) {
             for (let token of network.tokens) {
                 let transfers = await getTokenTransfers(network, token)
-                console.log(transfers)
                 for (let transfer of transfers) {
                     let invest = await Investment.findOne({ hash: transfer.hash });
                     if (invest) {
                         continue
                     }
 
-                    if (transfer.to.toLowerCase() != `0x${campaigns.hedging.toLowerCase()}`) continue
-                    if (network.name == "ethereum" && parseInt(transfer.blockNumber) <= 18695399) continue
+                    if (transfer.to.toLowerCase() != `0x${campaigns.mexc.toLowerCase()}`) continue
+                    if (network.name == "ethereum" && parseInt(transfer.blockNumber) <= 19268925) continue
+                    if (network.name == "polygon" && parseInt(transfer.blockNumber) <= 53745300) continue
+                    if (network.name == "bsc" && parseInt(transfer.blockNumber) <= 36300777) continue
                     let amount = new BigNumber(transfer.value).dividedBy(token.decimal == 6 ? 1000000 : 1000000000000000000)
                     let trx = new Investment({
                         from        : transfer.from,
@@ -72,7 +73,7 @@ const { token } = require('morgan');
                         contract    : token.address,
                         currency    : transfer.tokenSymbol, // usdc or usdt or kaspa...
                         decimal     : token.decimal,
-                        campaign    : 'mexc_hedging',
+                        campaign    : 'top12',
                         refund      : 0,
                         refundHash  : '',
                         status      : 'confirmed',
@@ -80,6 +81,7 @@ const { token } = require('morgan');
                         utime       : Date.now(),
                     });
 
+                    console.log('Saved ' + transfer.hash) 
                     await trx.save()
                 }
             }
@@ -97,7 +99,7 @@ async function getTokenTransfers(network, token) {
     let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: network.api + `&contractaddress=${token.address}&address=0x${campaigns.hedging}`,
+        url: network.api + `&contractaddress=${token.address}&address=0x${campaigns.top12}`,
         headers: {}
       };
       

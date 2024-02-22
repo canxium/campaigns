@@ -13,6 +13,7 @@ exports.index = async (req, res, next) => {
   let raised = investments.reduce((accumulator, currentValue) => {
     return accumulator + currentValue.amount
   }, 0);
+
   let ethereum = investments.reduce((accumulator, currentValue) => {
     if (currentValue.network != 'ethereum') return accumulator;
     return accumulator + currentValue.amount
@@ -30,6 +31,7 @@ exports.index = async (req, res, next) => {
 
   let mexc = {};
   let hedging = {};
+  let bitget = {};
   let foundation = 36213;
   let data = {};
   {
@@ -58,7 +60,20 @@ exports.index = async (req, res, next) => {
     hedging.completion = completion > 100 ? 100 : completion;
   }
 
-  return res.render('index', { investments: data, foundation: USDollar.format(foundation), raised: USDollar.format(raised), mexc: mexc, ethereum: USDollar.format(ethereum), polygon: USDollar.format(polygon), bsc: USDollar.format(bsc), hedging: hedging, });
+  {
+    let bitgetInvestments = await Investment.find({ campaign: 'top12', status: "confirmed"  }).sort({'amount': -1, 'ctime': 1});
+    data.bitget = await Investment.find({ campaign: 'top12'  }).sort({'amount': -1, 'ctime': 1});;
+    let raised = bitgetInvestments.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue.amount
+    }, 0);
+
+    let target = 75000;
+    let completion = ((raised)*100/target).toFixed(0)
+    bitget.raised = USDollar.format(raised);
+    bitget.completion = completion > 100 ? 100 : completion;
+  }
+
+  return res.render('index', { investments: data, foundation: USDollar.format(foundation), raised: USDollar.format(raised), mexc: mexc, ethereum: USDollar.format(ethereum), polygon: USDollar.format(polygon), bsc: USDollar.format(bsc), hedging: hedging, bitget: bitget });
 }
 
 exports.submitTx = async (req, res, next) => {
