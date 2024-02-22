@@ -58,7 +58,7 @@ const { token } = require('morgan');
                         continue
                     }
 
-                    if (transfer.to.toLowerCase() != `0x${campaigns.mexc.toLowerCase()}`) continue
+                    if (transfer.to.toLowerCase() != `0x${campaigns.top12.toLowerCase()}`) continue
                     if (network.name == "ethereum" && parseInt(transfer.blockNumber) <= 19268925) continue
                     if (network.name == "polygon" && parseInt(transfer.blockNumber) <= 53745300) continue
                     if (network.name == "bsc" && parseInt(transfer.blockNumber) <= 36300777) continue
